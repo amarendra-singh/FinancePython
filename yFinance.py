@@ -15,10 +15,13 @@ class FinanceInstrument():
         self.startDate = startDate
         self.endDate = endDate
         self.getData()
-        self.log_return()
+        self.LogReturn()
         self.plot()
         self.price_plot()
         self.return_plot()
+        self.meanReturn()
+        self.stdReturn()
+        self.annualizedPref()
 
     def __repr__(self):
         return "FinanceInstrument(ticker={}, startDate={}, endDate={})".format(self.ticker, self.startDate, self.endDate)
@@ -30,19 +33,46 @@ class FinanceInstrument():
         self.data = raw
         print(self.data)
 
-    def log_return(self):
+    def LogReturn(self):
         # print(self.data)
         price = self.data["price"]
         print(price)
-        self.data["Log_Return"] = np.log(price/price.shift(1))
+        self.data["LogReturn"] = np.log(price/price.shift(1))
         print(self.data)
 
     def plot(self):
-        # self.data.Log_Return.plot()
+        # self.data.LogReturn.plot()
         # plt.show()
-        # self.data.Log_Return.hist(bins=100)
+        # self.data.LogReturn.hist(bins=100)
         # plt.show()
         pass
+    
+    def meanReturn(self, freq = None):
+        '''Mean Return'''
+        if freq is None:
+           return self.data.LogReturn.mean()
+        else:
+            resampledPrice = self.data.price.resample(freq).last()
+            resampledReturn = np.log(resampledPrice/resampledPrice.shift(1))
+            print("Mean Return : ", resampledReturn.mean())
+            return resampledReturn.mean()
+
+    def stdReturn(self, freq = None):
+        '''Standard Diviation'''
+
+        if freq is None:
+            return self.data.LogReturn.std()
+        else:
+            resampledPrice = self.data.price.resample(freq).last()
+            resampledReturn = np.log(resampledPrice/resampledPrice.shift(1))
+            print("Standard Deviation : ", resampledReturn.std())
+            return resampledReturn.std()
+    
+    def annualizedPref(self):
+        '''Annualized Performance'''
+        meanReturn = round(self.data.LogReturn.mean()*252,3)
+        risk = round(self.data.LogReturn.std()* np.sqrt(252)*3)
+        print("Return {} | Risk {}".format(meanReturn, risk))
 
     def price_plot(self):
         self.data.price.plot(figsize = (12, 8))
@@ -61,7 +91,9 @@ class FinanceInstrument():
 
 
 stock = FinanceInstrument("AAPL","2000-01-01","2022-01-01")
-print(stock)
+stock.meanReturn("m")
+stock.stdReturn("m")
+# stock.annualizedPref()
 # getInput()ticker, startDate, endDate
 
 
