@@ -15,13 +15,13 @@ class FinanceInstrument():
         self.startDate = startDate
         self.endDate = endDate
         self.getData()
-        self.LogReturn()
+        # self.LogReturn()
         self.plot()
         self.price_plot()
         self.return_plot()
-        self.meanReturn()
-        self.stdReturn()
-        self.annualizedPref()
+        # self.meanReturn()
+        # self.stdReturn()
+        # self.annualizedPref()
 
     def __repr__(self):
         return "FinanceInstrument(ticker={}, startDate={}, endDate={})".format(self.ticker, self.startDate, self.endDate)
@@ -47,6 +47,30 @@ class FinanceInstrument():
         # plt.show()
         pass
     
+    def price_plot(self):
+        self.data.price.plot(figsize = (12, 8))
+        plt.title("Return {}".format(self.ticker), fontsize = 15)
+        plt.show()
+
+    def return_plot(self, kind = "hist"):
+        if kind == "ts":
+            self.data.price.plot(figsize = (12, 8))
+            plt.title("Return {}".format(self.ticker), fontsize = 15)
+            plt.show()
+        elif kind == "hist":
+            self.data.price.hist(figsize = (12,8), bins = int(np.sqrt(len(self.data))))
+            plt.title ("Frequency of Return {}".format(self.ticker), fontsize=15)
+            plt.show()
+
+    def setTicker(self, ticker = None):
+        if ticker is not None:
+            self.ticker = ticker
+            self.getData()
+            self.LogReturn()
+
+
+class RiskReturn(FinanceInstrument):
+    
     def meanReturn(self, freq = None):
         '''Mean Return'''
         if freq is None:
@@ -54,8 +78,8 @@ class FinanceInstrument():
         else:
             resampledPrice = self.data.price.resample(freq).last()
             resampledReturn = np.log(resampledPrice/resampledPrice.shift(1))
-            print("Mean Return : ", resampledReturn.mean())
-            return resampledReturn.mean()
+            print("Mean Return : ", resampledReturn.mean()*100)
+            return resampledReturn.mean()*100
 
     def stdReturn(self, freq = None):
         '''Standard Diviation'''
@@ -74,25 +98,12 @@ class FinanceInstrument():
         risk = round(self.data.LogReturn.std()* np.sqrt(252)*3)
         print("Return {} | Risk {}".format(meanReturn, risk))
 
-    def price_plot(self):
-        self.data.price.plot(figsize = (12, 8))
-        plt.title("Return {}".format(self.ticker), fontsize = 15)
-        plt.show()
-
-    def return_plot(self, kind = "hist"):
-        if kind == "ts":
-            self.data.price.plot(figsize = (12, 8))
-            plt.title("Return {}".format(self.ticker), fontsize = 15)
-            plt.show()
-        elif kind == "hist":
-            self.data.price.hist(figsize = (12,8), bins = int(np.sqrt(len(self.data))))
-            plt.title ("Frequency of Return {}".format(self.ticker), fontsize=15)
-            plt.show()
 
 
 stock = FinanceInstrument("AAPL","2000-01-01","2022-01-01")
-stock.meanReturn("m")
-stock.stdReturn("m")
+RandR = RiskReturn("AAPL","2000-01-01","2022-01-01")
+RandR.meanReturn("m")
+# stock.stdReturn("m")
 # stock.annualizedPref()
 # getInput()ticker, startDate, endDate
 
