@@ -65,15 +65,18 @@ class FinanceInstrument():
     def setTicker(self, ticker = None):
         if ticker is not None:
             self.ticker = ticker
-            self.getData()
+            # self.getData()
             self.LogReturn()
 
 
 class RiskReturn(FinanceInstrument):
-    
+    def __init__(self, ticker, startDate, endDate, freq = None):
+        self.freq = freq
+        super().__init__(ticker, startDate, endDate)
+
     def meanReturn(self, freq = None):
         '''Mean Return'''
-        if freq is None:
+        if self.freq is None:
            return self.data.LogReturn.mean()
         else:
             resampledPrice = self.data.price.resample(freq).last()
@@ -84,7 +87,7 @@ class RiskReturn(FinanceInstrument):
     def stdReturn(self, freq = None):
         '''Standard Diviation'''
 
-        if freq is None:
+        if self.freq is None:
             return self.data.LogReturn.std()
         else:
             resampledPrice = self.data.price.resample(freq).last()
@@ -101,8 +104,8 @@ class RiskReturn(FinanceInstrument):
 
 
 stock = FinanceInstrument("AAPL","2000-01-01","2022-01-01")
-RandR = RiskReturn("AAPL","2000-01-01","2022-01-01")
-RandR.meanReturn("m")
+RandR = RiskReturn("AAPL","2000-01-01","2022-01-01", freq="w")
+# RandR.meanReturn("m")
 # stock.stdReturn("m")
 # stock.annualizedPref()
 # getInput()ticker, startDate, endDate
