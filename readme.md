@@ -5,7 +5,7 @@ This repository contains a Python script that utilizes the yfinance library to r
 To get started with the script, you'll need to have Python 3 and the yfinance library installed on your machine. You can install yfinance by running the following command in your terminal or command prompt:
 
 ## Copy code
-       ```pip install yfinance```
+       pip install yfinance
 Next, clone or download the repository to your local machine and navigate to the directory where the script is located.
 
 ## Usage
