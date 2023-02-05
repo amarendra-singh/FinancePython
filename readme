@@ -11,11 +11,11 @@ Next, clone or download the repository to your local machine and navigate to the
 ## Usage
 The script allows you to retrieve information for a specified stock symbol, including:
 
-Historical price data
-Earnings per share (EPS)
-Price to earnings ratio (PE)
-Market capitalization
-To use the script, simply enter the stock symbol you're interested in when prompted, and the script will retrieve and display the relevant data.
+* Historical price data
+* Earnings per share (EPS)
+* Price to earnings ratio (PE)
+* Market capitalization
+* To use the script, simply enter the stock symbol you're interested in when prompted, and the script will retrieve and display the relevant data.
 
 Contributing
 If you'd like to contribute to this repository, feel free to submit a pull request with your changes. All contributions are welcome and appreciated.
